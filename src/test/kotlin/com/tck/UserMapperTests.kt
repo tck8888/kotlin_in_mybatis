@@ -36,4 +36,11 @@ class UserMapperTests {
         val user = userMapper.findUserById(8)
         println(user.toString())
     }
+
+    @Test
+    fun testFindUserByName() {
+        for (user in userMapper.findUserByName("tck0")) {
+            println(user.toString())
+        }
+    }
 }

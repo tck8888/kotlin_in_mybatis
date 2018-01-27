@@ -1,13 +1,14 @@
 package com.tck.mapper
 
 import com.tck.domain.User
-import org.apache.ibatis.annotations.Insert
-import org.apache.ibatis.annotations.Param
-import org.apache.ibatis.annotations.Select
+import org.apache.ibatis.annotations.*
+import org.apache.ibatis.jdbc.SQL
+
 
 /**
  * Created by tck on 2018/1/25.
  */
+@Mapper
 interface UserMapper {
 
 
@@ -16,4 +17,18 @@ interface UserMapper {
 
     @Select("select * from user_info where id = #{id}")
     fun findUserById(@Param("id") id: Int): User
+
+    @SelectProvider(type = UserMapperProvider::class, method = "findUserById")
+    fun findUserByName(name: String): List<User>
+
+    class UserMapperProvider {
+        fun findUserById(name: String): String {
+
+            return SQL()
+                    .SELECT("*")
+                    .FROM("user_info")
+                    .WHERE("user_name=${name}")
+                    .toString()
+        }
+    }
 }
